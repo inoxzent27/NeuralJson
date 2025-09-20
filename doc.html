@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralJSON</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="Nerual Json Favicon.png" type="image/png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .rgb-border {
+            position: relative;
+            background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5, #ffbe0b, #ff006e);
+            background-size: 400% 400%;
+            animation: rgbAnimation 3s ease infinite;
+            padding: 2px;
+            border-radius: 16px;
+        }
+        
+        .rgb-border::before {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: rgba(15, 15, 35, 0.95);
+            border-radius: 14px;
+            z-index: -1;
+        }
+        
+        @keyframes rgbAnimation {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(102, 126, 234, 0.8);
+            }
+        }
+        
+        .typing-cursor {
+            border-right: 2px solid #667eea;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { border-color: transparent; }
+            51%, 100% { border-color: #667eea; }
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .tech-stack {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen">
+    <!-- Hero Section -->
+    <header class="relative overflow-hidden py-20">
+        <div class="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-blue-900/20"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12">
+                <div class="inline-block rgb-border pulse-glow rounded-2xl p-8 mb-8">
+                    <h1 class="text-6xl md:text-7xl font-bold mb-4">
+                        🤯<span class="gradient-text">NeuralJSON</span>
+                    </h1>
+                    <p class="text-2xl md:text-3xl font-light typing-cursor" id="heroSubtitle">Ai Powerd Large DataSet Builder</p>
+                </div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                    The Neural Json AI-powered dataset builder combining modern design, powerful features, 
+                    and seamless user experience for developers and AI enthusiasts worldwide.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Team Section -->
+    <section class="py-16 scroll-reveal">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text">Meet the Visionaries</h2>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Founder -->
+                <div class="glassmorphism rounded-2xl p-8 feature-card">
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold pulse-glow">
+                            NDS
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">NADIR ALI SETHI</h3>
+                        <p class="text-purple-400 font-semibold mb-4">Founder & Visionary</p>
+                        <p class="text-gray-300 mb-6">Pioneering the future of AI dataset creation with innovative solutions and cutting-edge technology.</p>
+                        <a href="https://instagram.com/iisponsoredii" target="_blank" rel="noopener noreferrer" 
+                           class="inline-flex items-center bg-gradient-to-r from-pink-500 to-purple-600 px-6 py-3 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all transform hover:scale-105">
+                            <span class="mr-2">📮</span> INSTAGRAM
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Development Team -->
+                <div class="glassmorphism rounded-2xl p-8 feature-card">
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-gradient-to-r from-green-500 to-teal-500 rounded-full mx-auto mb-6 flex items-center justify-center text-2xl font-bold pulse-glow">
+                            IX
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">INOXZENT Team</h3>
+                        <p class="text-green-400 font-semibold mb-4">Development Partners</p>
+                        <p class="text-gray-300 mb-6">Expert developers bringing technical excellence and innovative solutions to transform ideas into reality.</p>
+                        <a href="https://inoxzent.in" target="_blank" rel="noopener noreferrer" 
+                           class="inline-flex items-center bg-gradient-to-r from-green-500 to-teal-600 px-6 py-3 rounded-full hover:from-green-600 hover:to-teal-700 transition-all transform hover:scale-105">
+                            <span class="mr-2">GITHUB</span> inoxzent27
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Showcase -->
+    <section class="py-20 scroll-reveal">
+        <div class="container mx-auto px-6">
+            <h2 class="text-5xl font-bold text-center mb-16 gradient-text">Powerful Features</h2>
+            
+            <!-- UI/UX Features -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold mb-8 text-center">🎨 Modern UI & UX</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">📱</div>
+                        <h4 class="text-lg font-semibold mb-2">Responsive Design</h4>
+                        <p class="text-gray-300 text-sm">Fully responsive with RGB & glassmorphism effects</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">🌙</div>
+                        <h4 class="text-lg font-semibold mb-2">Dark Theme</h4>
+                        <p class="text-gray-300 text-sm">Beautiful gradient backgrounds and dark aesthetics</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">✨</div>
+                        <h4 class="text-lg font-semibold mb-2">Smooth Animations</h4>
+                        <p class="text-gray-300 text-sm">Welcome screens and button animations</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h4 class="text-lg font-semibold mb-2">Hover Effects</h4>
+                        <p class="text-gray-300 text-sm">Interactive panels and action buttons</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Handling -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold mb-8 text-center">🗃️ File Upload & Handling</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">📄</div>
+                        <h4 class="text-lg font-semibold mb-2">Multiple Formats</h4>
+                        <p class="text-gray-300 text-sm">CSV, TXT, JSON, JSONL support</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h4 class="text-lg font-semibold mb-2">Drag & Drop</h4>
+                        <p class="text-gray-300 text-sm">Intuitive file upload interface</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">📂</div>
+                        <h4 class="text-lg font-semibold mb-2">Browse Files</h4>
+                        <p class="text-gray-300 text-sm">Traditional file selection option</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">⚡</div>
+                        <h4 class="text-lg font-semibold mb-2">Real-time Processing</h4>
+                        <p class="text-gray-300 text-sm">Instant preview of uploaded data</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Configuration -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold mb-8 text-center">⚙️ Data Configuration</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">🔄</div>
+                        <h4 class="text-lg font-semibold mb-2">Output Formats</h4>
+                        <p class="text-gray-300 text-sm">Choose JSON or JSONL formats</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">🏗️</div>
+                        <h4 class="text-lg font-semibold mb-2">Data Structures</h4>
+                        <p class="text-gray-300 text-sm">Basic, Q&A, Instruction, Custom</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">🎨</div>
+                        <h4 class="text-lg font-semibold mb-2">Custom Templates</h4>
+                        <p class="text-gray-300 text-sm">$line and $id placeholders support</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">🔀</div>
+                        <h4 class="text-lg font-semibold mb-2">Toggle Options</h4>
+                        <p class="text-gray-300 text-sm">Seamless format switching</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Generation -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold mb-8 text-center">👻 AI Data Generation</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">🧠</div>
+                        <h4 class="text-lg font-semibold mb-2">AI Integration</h4>
+                        <p class="text-gray-300 text-sm">Generate dataset entries with AI</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">💬</div>
+                        <h4 class="text-lg font-semibold mb-2">Custom Prompts</h4>
+                        <p class="text-gray-300 text-sm">Flexible prompt customization</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">📊</div>
+                        <h4 class="text-lg font-semibold mb-2">Format Support</h4>
+                        <p class="text-gray-300 text-sm">JSON & JSONL for AI data</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-6 feature-card">
+                        <div class="text-4xl mb-4">🔍</div>
+                        <h4 class="text-lg font-semibold mb-2">Auto Parsing</h4>
+                        <p class="text-gray-300 text-sm">Automatic preview of generated items</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Features -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glassmorphism rounded-2xl p-8 feature-card">
+                    <h3 class="text-2xl font-bold mb-6 gradient-text">📋 Preview & Editing</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-center"><span class="mr-3">✨</span> Real-time preview with syntax highlighting</li>
+                        <li class="flex items-center"><span class="mr-3">📋</span> Copy JSON/JSONL to clipboard</li>
+                        <li class="flex items-center"><span class="mr-3">🧹</span> Clear preview functionality</li>
+                        <li class="flex items-center"><span class="mr-3">📊</span> Auto line count tracking</li>
+                    </ul>
+                </div>
+
+                <div class="glassmorphism rounded-2xl p-8 feature-card">
+                    <h3 class="text-2xl font-bold mb-6 gradient-text">💾 Download & Export</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-center"><span class="mr-3">📥</span> Export as JSON or JSONL</li>
+                        <li class="flex items-center"><span class="mr-3">⚡</span> Instant download links</li>
+                        <li class="flex items-center"><span class="mr-3">📈</span> Status updates on processing</li>
+                        <li class="flex items-center"><span class="mr-3">✅</span> Completion notifications</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="py-16 scroll-reveal">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text">Built With Modern Technology</h2>
+            <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                <div class="glassmorphism rounded-xl p-8 text-center feature-card">
+                    <div class="text-5xl mb-4">🌐</div>
+                    <h3 class="text-xl font-bold mb-3 tech-stack">HTML5</h3>
+                    <p class="text-gray-300">Modern semantic markup for optimal structure and accessibility</p>
+                </div>
+                <div class="glassmorphism rounded-xl p-8 text-center feature-card">
+                    <div class="text-5xl mb-4">🎨</div>
+                    <h3 class="text-xl font-bold mb-3 tech-stack">CSS3</h3>
+                    <p class="text-gray-300">Advanced styling with glassmorphism and RGB animations</p>
+                </div>
+                <div class="glassmorphism rounded-xl p-8 text-center feature-card">
+                    <div class="text-5xl mb-4">⚡</div>
+                    <h3 class="text-xl font-bold mb-3 tech-stack">JavaScript</h3>
+                    <p class="text-gray-300">Dynamic functionality and real-time data processing</p>
+                    <p>& NODE.JS, NEXT.JS, PYTHON, JAVA<p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Statement -->
+    <section class="py-20 scroll-reveal">
+        <div class="container mx-auto px-6 text-center">
+            <div class="rgb-border rounded-3xl p-12 max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold mb-8 gradient-text">Our Mission</h2>
+                <p class="text-xl text-gray-300 leading-relaxed mb-8">
+                    NeuralJSON is designed for developers, data scientists, and AI enthusiasts who demand 
+                    excellence in dataset creation. We combine powerful AI integration, intuitive design, 
+                    and versatile data handling into a single, comprehensive platform that makes AI 
+                    dataset building accessible to everyone.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button onclick="showDemo()" 
+                            class="bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 rounded-full font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105">
+                        🚀 Try NeuralJSON
+                    </button>
+                    <button onclick="showContact()" 
+                            class="glassmorphism px-8 py-4 rounded-full font-semibold hover:bg-white/20 transition-all transform hover:scale-105">
+                        💬 Get In Touch
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/10">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-8">
+                <h3 class="text-3xl font-bold mb-2 gradient-text">🧠 NeuralJSON</h3>
+                <p class="text-gray-400">Super AI Dataset Builder</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-6 mb-8">
+                <a href="https://instagram.com/iisponsoredii" target="_blank" rel="noopener noreferrer" 
+                   class="text-gray-400 hover:text-white transition-colors">INSTAGRAM</a>
+                <a href="https://sites.google.com/view/inoxzent-in/home" target="_blank" rel="noopener noreferrer" 
+                   class="text-gray-400 hover:text-white transition-colors">🌐 INOXZENT</a>
+                <a href="index.html" class="text-gray-400 hover:text-white transition-colors">📚 Documentation</a>
+                <a href="https://github.com/inoxzent27" class="text-gray-400 hover:text-white transition-colors">💻 GitHub</a>
+                <a href="https://instagram.com/iisponsoredii" class="text-gray-400 hover:text-white transition-colors">📧 Contact</a>
+                <a href="https://instagram.com/iisponsoredii" class="text-gray-400 hover:text-white transition-colors">🔒 Privacy</a>
+            </div>
+            <p class="text-center text-gray-400 text-sm">
+                © 2024 NeuralJSON. Optimized for performance and readability. Developing by INOXZENT.in Because This isn't end.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Demo Modal -->
+    <div id="demoModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4">
+        <div class="glassmorphism rounded-2xl p-8 max-w-md w-full transform transition-all">
+            <h3 class="text-2xl font-bold mb-4 gradient-text">🚀 Experience NeuralJSON</h3>
+            <p class="text-gray-300 mb-6">Ready to revolutionize your AI dataset creation process?</p>
+            <div class="space-y-4">
+                <button class="w-full bg-gradient-to-r from-green-500 to-teal-600 py-3 rounded-lg hover:from-green-600 hover:to-teal-700 transition-all">
+                    🎯 Start Building Datasets
+                </button>
+                <button class="w-full glassmorphism py-3 rounded-lg hover:bg-white/20 transition-all">
+                    📖 View Documentation
+                </button>
+            </div>
+            <button onclick="hideDemo()" 
+                    class="mt-6 w-full bg-gray-600/50 py-3 rounded-lg hover:bg-gray-600/70 transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4">
+        <div class="glassmorphism rounded-2xl p-8 max-w-md w-full transform transition-all">
+            <h3 class="text-2xl font-bold mb-4 gradient-text">💬 Connect With Us</h3>
+            <div class="space-y-4">
+                <a href="https://instagram.com/iisponsoredii" target="_blank" rel="noopener noreferrer" 
+                   class="block glassmorphism p-4 rounded-lg hover:bg-white/20 transition-colors">
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-3">📱</span>
+                        <div>
+                            <p class="font-semibold">Instagram</p>
+                            <p class="text-gray-400">@iisponsoredii</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://sites.google.com/view/inoxzent-in/home" target="_blank" rel="noopener noreferrer" 
+                   class="block glassmorphism p-4 rounded-lg hover:bg-white/20 transition-colors">
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-3">🌐</span>
+                        <div>
+                            <p class="font-semibold">Website</p>
+                            <p class="text-gray-400">INOXZENT.in</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <button onclick="hideContact()" 
+                    class="mt-6 w-full bg-gray-600/50 py-3 rounded-lg hover:bg-gray-600/70 transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Typing animation
+        function typeWriter(text, element, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            element.classList.add('typing-cursor');
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    element.classList.remove('typing-cursor');
+                }
+            }
+            type();
+        }
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Typing animation
+            const heroSubtitle = document.getElementById('heroSubtitle');
+            setTimeout(() => {
+                typeWriter('Super AI Dataset Builder', heroSubtitle, 80);
+            }, 1000);
+
+            // Scroll reveal animation
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // Modal functions
+        function showDemo() {
+            document.getElementById('demoModal').classList.remove('hidden');
+            document.getElementById('demoModal').classList.add('flex');
+        }
+
+        function hideDemo() {
+            document.getElementById('demoModal').classList.add('hidden');
+            document.getElementById('demoModal').classList.remove('flex');
+        }
+
+        function showContact() {
+            document.getElementById('contactModal').classList.remove('hidden');
+            document.getElementById('contactModal').classList.add('flex');
+        }
+
+        function hideContact() {
+            document.getElementById('contactModal').classList.add('hidden');
+            document.getElementById('contactModal').classList.remove('flex');
+        }
+
+        // Close modals when clicking outside
+        document.getElementById('demoModal').addEventListener('click', function(e) {
+            if (e.target === this) hideDemo();
+        });
+
+        document.getElementById('contactModal').addEventListener('click', function(e) {
+            if (e.target === this) hideContact();
+        });
+
+        // Smooth scrolling and enhanced interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add stagger animation to feature cards
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'981ea783e33a97dc',t:'MTc1ODM0MzMyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

@@ -1,0 +1,801 @@
+<!-- Copyright (C) INOXZENT.in Corporation. All rights reserved. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuralJSON </title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="icon" href="Nerual Json Favicon.png" type="image/png">
+<style>
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary: #06b6d4;
+  --dark: #1e293b;
+  --darker: #0f172a;
+  --light: #f8fafc;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, var(--darker), var(--dark));
+  color: var(--light);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Intro */
+.intro {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  background: linear-gradient(135deg, #6366f1, #06b6d4);
+  display:flex; justify-content:center; align-items:center;
+  flex-direction:column;
+  color:#fff; font-size:2rem; z-index:9999;
+  animation: introFade 3s forwards;
+}
+@keyframes introFade { 0% {opacity:1;} 90% {opacity:1;} 100% {opacity:0; display:none;} }
+
+.app-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { display:flex; justify-content:space-between; align-items:center; padding:20px 0; margin-bottom:30px; border-bottom:1px solid var(--glass-border); }
+.logo { display:flex; align-items:center; gap:12px; font-size:1.8rem; font-weight:700; color:white; }
+.logo i { color: var(--secondary); }
+.nav-right { display:flex; gap:15px; }
+.icon-btn { background: var(--glass); border:1px solid var(--glass-border); border-radius:8px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; color: var(--light); cursor:pointer; transition:all 0.3s ease; }
+.icon-btn:hover { background: rgba(255,255,255,0.15); transform:translateY(-2px); }
+.main-content { display:grid; grid-template-columns:1fr 1.5fr; gap:25px; margin-bottom:30px; }
+.panel { background: var(--glass); border:1px solid var(--glass-border); border-radius:16px; padding:25px; backdrop-filter: blur(15px) saturate(180%); box-shadow:0 8px 32px rgba(0,0,0,0.25); }
+.panel-title { font-size:1.2rem; font-weight:600; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+.upload-area { border:2px dashed var(--glass-border); border-radius:12px; padding:30px; text-align:center; cursor:pointer; transition: all 0.3s ease; margin-bottom:20px; }
+.upload-area:hover { border-color: var(--primary); background: rgba(99,102,241,0.1); }
+.upload-icon { font-size:3rem; color:var(--primary); margin-bottom:15px; }
+.upload-text p { margin-bottom:5px; }
+.upload-formats { font-size:0.85rem; color:#94a3b8; }
+.config-section { margin-top:25px; }
+.config-item { margin-bottom:15px; }
+.config-label { display:block; margin-bottom:8px; font-weight:500; }
+select,input,textarea { width:100%; padding:12px 15px; border-radius:8px; border:1px solid var(--glass-border); background:rgba(0,0,0,0.2); color:var(--light); font-family:inherit; }
+select:focus,input:focus,textarea:focus { outline:none; border-color:var(--primary); }
+.toggle-group { display:flex; background:rgba(0,0,0,0.2); border-radius:8px; overflow:hidden; }
+.toggle-option { flex:1; text-align:center; padding:12px; cursor:pointer; transition:all 0.3s ease; color:#cbd5e1; }
+.toggle-option.active { background:var(--primary); color:white; }
+.preview-container { height:500px; display:flex; flex-direction:column; }
+.preview-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+.preview-actions { display:flex; gap:10px; }
+.preview { flex:1; background:#011627; border-radius:12px; padding:20px; overflow:auto; font-family:'Fira Code', monospace; font-size:14px; line-height:1.5; position:relative; white-space:pre-wrap; word-break:break-word; }
+.json-line { display:block; margin-bottom:4px; }
+.json-key { color:#7fdbca; }
+.json-string { color:#ecc48d; }
+.json-number { color:#f78c6c; }
+.json-boolean { color:#ff5874; }
+.cursor { display:inline-block; width:8px; height:18px; background:var(--secondary); animation: blink 1s infinite; vertical-align:middle; }
+@keyframes blink {50%{opacity:0;}}
+.action-buttons { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; margin-top:25px; }
+.action-btn { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px 15px; border-radius:12px; background:var(--glass); border:1px solid var(--glass-border); color:var(--light); cursor:pointer; transition:all 0.3s ease; text-align:center; }
+.action-btn:hover { transform:translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.25); }
+.action-btn i { font-size:1.8rem; margin-bottom:10px; }
+.btn-json { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); }
+.btn-jsonl { background:linear-gradient(135deg,var(--secondary),#0891b2); }
+.btn-ai { background:linear-gradient(135deg,#8b5cf6,#7c3aed); }
+.status-bar { display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding:15px; background:var(--glass); border:1px solid var(--glass-border); border-radius:12px; font-size:0.9rem; }
+.status-item { display:flex; align-items:center; gap:8px; }
+.status-indicator { width:10px; height:10px; border-radius:50%; background:var(--success); }
+.status-indicator.processing { background:var(--warning); animation:pulse 2s infinite; }
+@keyframes pulse {0%,100%{opacity:1;}50%{opacity:0.5;}}
+footer { text-align:center; padding:30px 0; margin-top:40px; border-top:1px solid var(--glass-border); color:#94a3b8; }
+.footer-warning { color:var(--warning); margin-top:5px; font-weight:600; }
+.footer-links { display:flex; justify-content:center; gap:25px; margin-top:15px; }
+.footer-links a { color:#cbd5e1; text-decoration:none; transition:color 0.3s ease; }
+.footer-links a:hover { color:var(--primary); }
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(5px); z-index:1000; justify-content:center; align-items:center; }
+.modal-content { background:var(--dark); border-radius:16px; padding:30px; width:90%; max-width:600px; max-height:80vh; overflow-y:auto; border:1px solid var(--glass-border); box-shadow:0 10px 40px rgba(0,0,0,0.3); }
+.modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.modal-title { font-size:1.5rem; font-weight:600; }
+.close-modal { background:none; border:none; color:var(--light); font-size:1.5rem; cursor:pointer; }
+@media(max-width:900px){.main-content{grid-template-columns:1fr;}.action-buttons{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="intro"><i class="fa-solid fa-brain-circuit"></i> Neural JSON <br> </div>
+
+<div class="app-container">
+<header>
+<div class="logo"><i class="fa-solid fa-brain-circuit"></i> NeuralJSON</div>
+<div class="nav-right">
+<button class="icon-btn" title="Settings" onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
+<button class="icon-btn" title="Help" onclick="openHelp()"><i class="fa-solid fa-circle-question"></i></button>
+</div>
+</header>
+
+<div class="main-content">
+<div class="panel">
+<div class="panel-title"><i class="fa-solid fa-file-import"></i> Data Source</div>
+<div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
+<div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+<div class="upload-text"><p>Drag & drop your file here</p><p>or</p></div>
+<label for="fileInput" class="btn-primary"><i class="fa-solid fa-file"></i> Browse Files</label>
+<input type="file" id="fileInput" accept=".csv,.txt,.json,.jsonl" hidden>
+<div class="upload-formats">Supports: CSV, TXT, JSON, JSONL</div>
+</div>
+<div class="config-section">
+<div class="config-item">
+<label class="config-label">Output Format</label>
+<div class="toggle-group">
+<div class="toggle-option active" data-format="json">JSON</div>
+<div class="toggle-option" data-format="jsonl">JSONL</div>
+</div>
+</div>
+<div class="config-item">
+<label class="config-label">Data Structure</label>
+<select id="structureType">
+<option value="basic">Basic (id,text)</option>
+<option value="qa">Q&A</option>
+<option value="instruct">Instruction</option>
+<option value="custom">Custom</option>
+</select>
+</div>
+<div class="config-item" id="customStructure" style="display:none;">
+<label class="config-label">Custom JSON Template</label>
+<input id="customTemplate" type="text" placeholder='{"id":"$id","content":"$line"}'><small>Use $line for text, $id for auto ID</small>
+</div>
+</div>
+</div>
+<div class="panel">
+<div class="preview-header"><div class="panel-title"><i class="fa-solid fa-eye"></i> Preview</div><div class="preview-actions">
+<button class="icon-btn" title="Copy JSON" onclick="copyToClipboard()"><i class="fa-solid fa-copy"></i></button>
+<button class="icon-btn" title="Clear Preview" onclick="clearPreview()"><i class="fa-solid fa-trash"></i></button>
+</div></div>
+<div class="preview" id="preview"><span id="typed"></span><span class="cursor"></span></div>
+</div>
+</div>
+<div class="action-buttons">
+<div class="action-btn btn-json" onclick="downloadFile('json')"><i class="fa-solid fa-code"></i> Export JSON</div>
+<div class="action-btn btn-jsonl" onclick="downloadFile('jsonl')"><i class="fa-solid fa-stream"></i> Export JSONL</div>
+<div class="action-btn btn-ai" onclick="openAIModal()"><i class="fa-solid fa-robot"></i> AI Data Generation</div>
+</div>
+<div class="status-bar"><div class="status-item"><div class="status-indicator" id="statusIndicator"></div><span id="statusText">Ready</span></div>
+<div class="status-item"><i class="fa-solid fa-file-lines"></i> <span id="lineCount">0 lines processed</span></div>
+</div>
+<footer>NeuralJSON Ai Powerd by INOXZENT.in <div class="footer-warning">NeuralJSON can make mistakes. Check important info.</div>
+<div class="footer-links">
+<a href="doc.html"><i class="fa-solid fa-book"></i> Documentation</a>
+<a href="https://github.com/inoxzent27"><i class="fa-brands fa-github"></i> GitHub</a>
+<a href="https://www.instagram.com/iisponsoredii/"><i class="fa-solid fa-envelope"></i> Contact</a>
+<a href="doc.html"><i class="fa-solid fa-shield"></i> Privacy</a>
+</div></footer>
+
+<!-- AI Modal (no client-side API key) -->
+<div class="modal" id="aiModal" onclick="modalBackgroundClick(event,'aiModal')">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="aiModalTitle">
+    <div class="modal-header">
+      <div class="modal-title" id="aiModalTitle"><i class="fa-solid fa-robot"></i> AI Data Generation</div>
+      <button class="close-modal" onclick="closeModal('aiModal')">&times;</button>
+    </div>
+
+    <div style="display:grid;gap:12px;">
+      <div>
+        <label class="config-label">Provider</label>
+        <select id="aiProvider">
+          <option value="openai">OpenAI</option>
+          <option value="openrouter">OpenRouter</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="config-label">Model</label>
+        <input id="aiModel" placeholder="You Can Use Your Own Ai Models Here !" />
+        <small style="color:#94a3b8">USE THIS MODEL mistralai/mixtral-8x7b-instruct.</small>
+      </div>
+
+      <div>
+        <label class="config-label">Prompt</label>
+        <textarea id="aiPrompt" rows="4" placeholder='E.g. "Generate 20 short JSON objects with a key \"text\" describing travel tips for Amarica."'></textarea>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1;">
+          <label class="config-label">Items to generate</label>
+          <input id="itemCount" type="number" min="1" max="1000" value="10" />
+        </div>
+        <div style="flex:1;">
+          <label class="config-label">Format</label>
+          <select id="aiFormat">
+            <option value="json">JSON (array)</option>
+            <option value="jsonl">JSONL (newline delimited)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px;">
+        <button class="btn-json" style="padding:10px 18px;" onclick="generateWithAI()">Generate</button>
+      </div>
+    </div>
+
+    <hr style="margin:14px 0;border-color:var(--glass-border)">
+    <div style="color:#94a3b8;font-size:0.9rem;">
+      <strong>Note:</strong> You Can Generate Unlimited <code>Large DataSet</code> Here. This is Developing By INOXZENT.in Because this ins,t end.
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal" id="settingsModal" onclick="modalBackgroundClick(event,'settingsModal')">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="modal-header">
+      <div class="modal-title" id="settingsModalTitle"><i class="fa-solid fa-gear"></i> Settings</div>
+      <button class="close-modal" onclick="closeModal('settingsModal')">&times;</button>
+    </div>
+
+    <div style="display:grid;gap:12px;">
+      <div>
+        <label class="config-label">Default API Provider</label>
+        <select id="defaultProvider">
+          <option value="openai">OpenAI</option>
+          <option value="openrouter">OpenRouter</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="config-label">Default Model</label>
+        <input id="defaultModel" placeholder="e.g. gpt-4o-mini" />
+      </div>
+
+      <div style="color:#94a3b8;font-size:0.9rem;">
+        <strong>Security:</strong> This UI does not accept API keys. Implement a server-side proxy at <code>/api/ai/generate</code>.
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; margin-top:6px;">
+        <button class="btn-json" style="padding:8px 16px;" onclick="closeModal('settingsModal')">Done</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Help Modal -->
+<div class="modal" id="helpModal" onclick="modalBackgroundClick(event,'helpModal')">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-circle-question"></i> Help</div>
+      <button class="close-modal" onclick="closeModal('helpModal')">&times;</button>
+    </div>
+    <div style="color:#94a3b8;line-height:1.5;">
+      <p><strong>Quick tips:</strong></p>
+      <ul>
+        <li>Upload CSV/TXT/JSON/JSONL and choose output format.</li>
+        <li>Open <em>AI Data Generation</em>, set prompt, provider, model, and click Generate.</li>
+        <li>Server must implement <code>/api/ai/generate</code> and call the AI provider with a secret API key.</li>
+        <li>Use Suggested Api in Free</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+/*
+  COMPLETE NeuralJSON client-side script with auto API selection.
+  SECURITY: The OPENROUTER_API_KEY below is embedded for LOCAL TESTING ONLY.
+  DO NOT publish or commit client-side secrets. Use a server-side proxy in production.
+*/
+
+/* ==========================
+   CONFIG / ENDPOINTS
+   ========================== */
+// Direct OpenRouter endpoint (client-side usage; insecure for production)
+const OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
+
+// ***** WARNING *****
+// The following key was provided in this conversation. It's placed here ONLY to
+// satisfy a local/test usage case. Remove this line for production and use a
+// server-side proxy with the key stored in an environment variable.
+const OPENROUTER_API_KEY = "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";
+
+// Server proxy endpoint (recommended). Your server should call OpenRouter using a secret key.
+const SERVER_PROXY_ENDPOINT = "/api/ai/generate";
+
+/* ==========================
+   DOM ELEMENTS
+   ========================== */
+const fileInput = document.getElementById('fileInput');
+const dropZone = document.getElementById('dropZone');
+const typedEl = document.getElementById('typed');
+const statusIndicator = document.getElementById('statusIndicator');
+const statusText = document.getElementById('statusText');
+const lineCount = document.getElementById('lineCount');
+const structureType = document.getElementById('structureType');
+const customStructure = document.getElementById('customStructure');
+const customTemplate = document.getElementById('customTemplate');
+const toggleOptions = document.querySelectorAll('.toggle-option');
+
+const aiModal = document.getElementById('aiModal');
+const settingsModal = document.getElementById('settingsModal');
+const helpModal = document.getElementById('helpModal');
+
+const aiProviderEl = document.getElementById('aiProvider');
+const aiModelEl = document.getElementById('aiModel');
+const aiPromptEl = document.getElementById('aiPrompt');
+const itemCountEl = document.getElementById('itemCount');
+const aiFormatEl = document.getElementById('aiFormat');
+
+const defaultProviderEl = document.getElementById('defaultProvider');
+const defaultModelEl = document.getElementById('defaultModel');
+
+/* ==========================
+   STATE
+   ========================== */
+let currentData = [];
+let currentFormat = 'json';
+// apiMode: 'server' | 'client' (determined at init)
+let apiMode = 'server';
+
+/* ==========================
+   INIT
+   ========================== */
+document.addEventListener('DOMContentLoaded', async () => {
+  showIntro();
+  bindEvents();
+  loadSettings();
+  renderPreview();
+  updateStatus('ready', 'Ready to process files');
+
+  // detect whether server proxy is available; fallback to client direct OpenRouter if not.
+  try {
+    await initApiMode();
+  } catch (e) {
+    console.warn('API mode detection failure', e);
+    apiMode = 'client';
+  }
+});
+
+/* ==========================
+   INTRO TYPING
+   ========================== */
+function showIntro() {
+  const introText = "Welcome to NeuralJSON - AI Dataset Builder";
+  if (!typedEl) return;
+  typedEl.innerHTML = '';
+  let i = 0;
+  (function type() {
+    if (i < introText.length) {
+      typedEl.innerHTML += introText[i++];
+      setTimeout(type, 40);
+    } else {
+      typedEl.innerHTML += '<br><span class="cursor"></span>';
+    }
+  })();
+}
+
+/* ==========================
+   BIND EVENTS
+   ========================== */
+function bindEvents() {
+  if (fileInput) fileInput.addEventListener('change', handleFileUpload);
+  if (dropZone) {
+    dropZone.addEventListener('dragover', handleDragOver);
+    dropZone.addEventListener('dragleave', handleDragLeave);
+    dropZone.addEventListener('drop', handleDrop);
+  }
+
+  toggleOptions.forEach(opt => opt.addEventListener('click', handleToggleFormat));
+  if (structureType) structureType.addEventListener('change', handleStructureChange);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal('aiModal'); closeModal('settingsModal'); closeModal('helpModal');
+    }
+  });
+}
+
+/* ==========================
+   FILE HANDLING FUNCTIONS
+   ========================== */
+function handleDragOver(e) {
+  e.preventDefault();
+  if (!dropZone) return;
+  dropZone.style.borderColor = 'var(--primary)';
+  dropZone.style.background = 'rgba(99,102,241,0.1)';
+}
+
+function handleDragLeave(e) {
+  if (!dropZone) return;
+  dropZone.style.borderColor = 'var(--glass-border)';
+  dropZone.style.background = 'transparent';
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  if (!dropZone || !fileInput) return;
+  dropZone.style.borderColor = 'var(--glass-border)';
+  dropZone.style.background = 'transparent';
+  if (e.dataTransfer.files.length) {
+    fileInput.files = e.dataTransfer.files;
+    handleFileUpload();
+  }
+}
+
+function handleFileUpload() {
+  if (!fileInput || !fileInput.files || !fileInput.files[0]) return;
+  const file = fileInput.files[0];
+  updateStatus('processing', `Processing ${file.name}...`);
+
+  const reader = new FileReader();
+  reader.onload = e => processFileContent(e.target.result, file.name);
+  reader.readAsText(file);
+}
+
+function processFileContent(content, filename) {
+  const ext = filename.split('.').pop().toLowerCase();
+  let data = [];
+  try {
+    if (ext === 'csv') data = csvToJson(content);
+    else if (ext === 'json') data = JSON.parse(content);
+    else if (ext === 'jsonl') data = jsonlToJson(content);
+    else data = txtToJson(content);
+
+    currentData = mapStructure(data);
+    renderPreview();
+    updateStatus('success', `Processed ${currentData.length} lines`);
+    if (lineCount) lineCount.textContent = `${currentData.length} lines processed`;
+  } catch (err) {
+    updateStatus('error', `Error: ${err.message}`);
+  }
+}
+
+function csvToJson(content) {
+  return content.split(/\r?\n/).filter(l => l.trim()).map((line, idx) => ({ id: idx + 1, text: line.trim() }));
+}
+function txtToJson(content) {
+  return content.split(/\r?\n/).filter(l => l.trim()).map((line, idx) => ({ id: idx + 1, text: line.trim() }));
+}
+function jsonlToJson(content) {
+  return content.split(/\r?\n/).filter(l => l.trim()).map((line, idx) => {
+    try { return { ...JSON.parse(line), id: idx + 1 }; }
+    catch { return { id: idx + 1, text: line.trim() }; }
+  });
+}
+
+/* ==========================
+   STRUCTURE MAPPING
+   ========================== */
+function mapStructure(data) {
+  const type = (structureType && structureType.value) ? structureType.value : 'basic';
+  if (type === 'basic') {
+    return data.map((d, i) => ({ id: (d && d.id) || i + 1, text: (typeof d === 'string') ? d : (d && (d.text || d.content) ? (d.text || d.content) : JSON.stringify(d)) }));
+  } else if (type === 'qa') {
+    return data.map((d, i) => ({ id: (d && d.id) || i + 1, question: d ? (d.question || d.q || d.prompt || (d.text || '')) : '', answer: d ? (d.answer || d.a || '') : '' }));
+  } else if (type === 'instruct') {
+    return data.map((d, i) => ({ id: (d && d.id) || i + 1, instruction: d ? (d.instruction || d.prompt || (d.text || '')) : '', output: d ? (d.output || '') : '' }));
+  } else if (type === 'custom') {
+    const tpl = (customTemplate && customTemplate.value) ? customTemplate.value : '{"id":"$id","content":"$line"}';
+    return data.map((d, i) => {
+      const line = (typeof d === 'string') ? d : (d && (d.text || d.content) ? (d.text || d.content) : JSON.stringify(d));
+      const id = (d && d.id) || i + 1;
+      try {
+        const replaced = tpl.replace(/\$line/g, line).replace(/\$id/g, id);
+        return JSON.parse(replaced);
+      } catch (err) {
+        return { id, content: line };
+      }
+    });
+  }
+  return data;
+}
+
+/* ==========================
+   FORMAT TOGGLE
+   ========================== */
+function handleToggleFormat(e) {
+  toggleOptions.forEach(opt => opt.classList.remove('active'));
+  const target = e.currentTarget || e.target;
+  if (!target) return;
+  target.classList.add('active');
+  currentFormat = target.dataset.format || 'json';
+  renderPreview();
+}
+
+/* ==========================
+   STRUCTURE CHANGE
+   ========================== */
+function handleStructureChange() {
+  if (!customStructure || !structureType) return;
+  customStructure.style.display = (structureType.value === 'custom') ? 'block' : 'none';
+  if (currentData.length) currentData = mapStructure(currentData);
+  renderPreview();
+}
+
+/* ==========================
+   RENDER PREVIEW
+   ========================== */
+function renderPreview() {
+  if (!typedEl) return;
+  let output = currentFormat === 'json' ? JSON.stringify(currentData, null, 2) : currentData.map(i => JSON.stringify(i)).join('\n');
+  typedEl.innerHTML = formatJsonText(output) + '<span class="cursor"></span>';
+}
+
+function formatJsonText(text) {
+  if (!text) return '';
+  return text.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+    m => {
+      let cls = 'json-number';
+      if (/^"/.test(m)) cls = /:$/.test(m) ? 'json-key' : 'json-string';
+      else if (/true|false/.test(m)) cls = 'json-boolean';
+      else if (/null/.test(m)) cls = 'json-null';
+      return `<span class="${cls}">${m}</span>`;
+    }).replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;');
+}
+
+/* ==========================
+   STATUS
+   ========================== */
+function updateStatus(status, msg) {
+  if (statusText) statusText.textContent = msg;
+  if (!statusIndicator) return;
+  statusIndicator.classList.remove('processing');
+  switch (status) {
+    case 'ready': statusIndicator.style.background = 'var(--success)'; break;
+    case 'processing': statusIndicator.style.background = 'var(--warning)'; statusIndicator.classList.add('processing'); break;
+    case 'success': statusIndicator.style.background = 'var(--success)'; break;
+    case 'error': statusIndicator.style.background = 'var(--error)'; break;
+  }
+}
+
+/* ==========================
+   DOWNLOAD / COPY / CLEAR
+   ========================== */
+function downloadFile(type) {
+  if (!currentData.length) return updateStatus('error', 'No data to download');
+  const content = type === 'json' ? JSON.stringify(currentData, null, 2) : currentData.map(i => JSON.stringify(i)).join('\n');
+  const blob = new Blob([content], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `dataset.${type}`;
+  a.click();
+  updateStatus('success', `Downloaded dataset.${type}`);
+}
+
+function copyToClipboard() {
+  if (!currentData.length) return;
+  const content = currentFormat === 'json' ? JSON.stringify(currentData, null, 2) : currentData.map(i => JSON.stringify(i)).join('\n');
+  navigator.clipboard.writeText(content).then(() => updateStatus('success', 'Copied to clipboard'))
+    .catch(() => updateStatus('error', 'Failed to copy'));
+}
+
+function clearPreview() {
+  currentData = [];
+  if (typedEl) typedEl.innerHTML = '';
+  if (fileInput) fileInput.value = '';
+  if (lineCount) lineCount.textContent = '0 lines processed';
+  updateStatus('ready', 'Ready to process files');
+}
+
+/* ==========================
+   MODALS
+   ========================== */
+function openAIModal() { if (aiModal) { aiModal.style.display = 'flex'; if (defaultProviderEl) aiProviderEl.value = defaultProviderEl.value || 'openrouter'; aiModelEl.value = defaultModelEl.value || ''; } }
+function openSettings() { if (settingsModal) settingsModal.style.display = 'flex'; }
+function openHelp() { if (helpModal) helpModal.style.display = 'flex'; }
+function closeModal(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+function modalBackgroundClick(e, id) { if (e.target.classList.contains('modal')) closeModal(id); }
+
+/* ==========================
+   LOAD / SAVE DEFAULTS
+   ========================== */
+function loadSettings() {
+  if (!defaultProviderEl || !defaultModelEl) return;
+  defaultProviderEl.value = localStorage.getItem('neuralDefaultProvider') || 'openrouter';
+  defaultModelEl.value = localStorage.getItem('neuralDefaultModel') || '';
+  if (aiProviderEl) aiProviderEl.value = defaultProviderEl.value;
+  if (aiModelEl) aiModelEl.value = defaultModelEl.value;
+}
+if (defaultProviderEl) defaultProviderEl.addEventListener('change', () => localStorage.setItem('neuralDefaultProvider', defaultProviderEl.value));
+if (defaultModelEl) defaultModelEl.addEventListener('input', () => localStorage.setItem('neuralDefaultModel', defaultModelEl.value));
+
+/* ==========================
+   API MODE DETECTION
+   ==========================
+   Tries the server proxy quickly. If server proxy responds, use it.
+   Otherwise fall back to direct OpenRouter client call.
+*/
+async function initApiMode(timeoutMs = 2000) {
+  updateStatus('processing', 'Detecting API mode...');
+  // quick probe payload -- server should accept this shape
+  const probeBody = { provider: 'probe', model: 'probe', prompt: 'ping', itemCount: 1, format: 'json' };
+
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const resp = await fetch(SERVER_PROXY_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(probeBody),
+      signal: controller.signal
+    });
+    clearTimeout(id);
+    if (resp.ok) {
+      apiMode = 'server';
+      updateStatus('ready', 'Using server proxy for AI');
+      return;
+    } else {
+      apiMode = 'client';
+      updateStatus('ready', 'Server proxy unavailable — using client-side OpenRouter');
+      return;
+    }
+  } catch (err) {
+    clearTimeout(id);
+    apiMode = 'client';
+    updateStatus('ready', 'Server proxy not reachable — using client-side OpenRouter');
+    return;
+  }
+}
+
+/* ==========================
+   AI GENERATION
+   ==========================
+   Behavior:
+     - If aiProviderEl explicitly set to 'server' => force server proxy
+     - Else if aiProviderEl explicitly 'openrouter' or apiMode === 'client' => use direct OpenRouter (client)
+     - Else use server proxy
+*/
+async function generateWithAI() {
+  const providerUi = (aiProviderEl && aiProviderEl.value) ? aiProviderEl.value : (defaultProviderEl && defaultProviderEl.value) || 'openrouter';
+  const provider = providerUi.toLowerCase();
+  const model = (aiModelEl && aiModelEl.value && aiModelEl.value.trim()) ? aiModelEl.value.trim() : (defaultModelEl && defaultModelEl.value) || '';
+  const prompt = (aiPromptEl && aiPromptEl.value) ? aiPromptEl.value.trim() : '';
+  const itemCount = parseInt((itemCountEl && itemCountEl.value) || '10', 10);
+  const format = (aiFormatEl && aiFormatEl.value) ? aiFormatEl.value : 'json';
+
+  if (!prompt) return updateStatus('error', 'Please enter a prompt');
+  if (!model) return updateStatus('error', 'Please enter a model name (server must support it)');
+
+  updateStatus('processing', 'Sending request for AI generation...');
+  closeModal('aiModal');
+
+  try {
+    let resp, data, resJson = [];
+
+    // Decide what to use
+    const forceServer = (provider === 'server' || provider === 'proxy');
+    const useDirectOpenRouter = (provider === 'openrouter' || provider === 'openrouter-direct' || apiMode === 'client');
+
+    if (!forceServer && useDirectOpenRouter) {
+      // Direct client call to OpenRouter (in-browser). This will expose OPENROUTER_API_KEY to the browser.
+      if (!OPENROUTER_API_KEY) {
+        throw new Error('No OPENROUTER_API_KEY set for client fallback. Configure a server proxy or set the key for local testing.');
+      }
+
+      const body = {
+        model,
+        messages: [{ role: "user", content: prompt }],
+        // optional: max_tokens, temperature, etc.
+      };
+
+      resp = await fetch(OPENROUTER_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${OPENROUTER_API_KEY}`
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(`OpenRouter responded ${resp.status}: ${text}`);
+      }
+
+      data = await resp.json();
+
+      // Extract content
+      let generatedText = '';
+      if (Array.isArray(data.choices) && data.choices.length) {
+        const choice = data.choices[0];
+        generatedText = (choice.message && choice.message.content) ? choice.message.content : (choice.text || '');
+      } else if (typeof data.generated === 'string') {
+        generatedText = data.generated;
+      } else {
+        generatedText = JSON.stringify(data);
+      }
+
+      resJson = parseAIData(generatedText, format);
+
+    } else {
+      // Use server-side proxy (recommended)
+      const endpoint = SERVER_PROXY_ENDPOINT;
+      const body = { provider, model, prompt, itemCount, format };
+
+      resp = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(`Server responded ${resp.status}: ${text}`);
+      }
+
+      data = await resp.json();
+
+      if (Array.isArray(data.items)) {
+        resJson = data.items;
+      } else if (typeof data.generated === 'string') {
+        resJson = parseAIData(data.generated, format);
+      } else if (Array.isArray(data)) {
+        resJson = data;
+      } else {
+        throw new Error('Unexpected server response. Expected { items: [...] } or { generated: "..." }');
+      }
+    }
+
+    if (!Array.isArray(resJson)) resJson = [resJson];
+    currentData = resJson.map((item, idx) => { if (!item.id) item.id = idx + 1; return item; });
+    currentFormat = format;
+    toggleOptions.forEach(opt => {
+      const should = (opt.dataset.format === format);
+      opt.classList.toggle('active', should);
+    });
+    renderPreview();
+    updateStatus('success', `AI generated ${currentData.length} items`);
+    if (lineCount) lineCount.textContent = `${currentData.length} lines generated`;
+  } catch (err) {
+    console.error(err);
+    updateStatus('error', `AI generation failed: ${err.message}`);
+  }
+}
+
+/* ==========================
+   PARSE AI OUTPUT -> JSON/JSONL
+   ========================== */
+function parseAIData(generated, format) {
+  if (!generated) return [];
+  try {
+    if (format === 'json') {
+      try {
+        const parsed = JSON.parse(generated);
+        return Array.isArray(parsed) ? parsed : [parsed];
+      } catch (e) {
+        const arrMatch = generated.match(/\[[\s\S]*\]/);
+        if (arrMatch) return JSON.parse(arrMatch[0]);
+        const firstBrace = generated.indexOf('[');
+        if (firstBrace >= 0) {
+          const candidate = generated.slice(firstBrace);
+          return JSON.parse(candidate);
+        }
+        return generated.split(/\r?\n/).filter(l => l.trim()).map((l, idx) => ({ id: idx + 1, text: l.trim() }));
+      }
+    } else { // jsonl
+      const lines = generated.split(/\r?\n/).filter(l => l.trim());
+      const out = [];
+      for (const l of lines) {
+        try { out.push(JSON.parse(l)); } catch { out.push({ text: l.trim() }); }
+      }
+      return out;
+    }
+  } catch (err) {
+    console.warn('parseAIData fallback', err);
+    return [];
+  }
+}
+
+/* ==========================
+   EXPORTS - make functions accessible to onclick handlers
+   ========================== */
+window.generateWithAI = generateWithAI;
+window.downloadFile = downloadFile;
+window.copyToClipboard = copyToClipboard;
+window.clearPreview = clearPreview;
+window.openAIModal = openAIModal;
+window.openSettings = openSettings;
+window.openHelp = openHelp;
+window.closeModal = closeModal;
+window.modalBackgroundClick = modalBackgroundClick;
+</script>
+</body>
+</html>
